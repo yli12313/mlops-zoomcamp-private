@@ -5,9 +5,10 @@ import sys
 
 def read_data(filename):
     categorical = ['PULocationID', 'DOLocationID']
+    
+    print(filename + '\n')
 
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'}
-    df = pd.read_parquet(filename, storage_options=headers)
+    df = pd.read_parquet(filename)
     
     df['duration'] = df.tpep_dropoff_datetime - df.tpep_pickup_datetime
     df['duration'] = df.duration.dt.total_seconds() / 60
@@ -24,7 +25,7 @@ def main(year = 0000, month = 0):
 
     categorical = ['PULocationID', 'DOLocationID']
 
-    df = read_data('https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_{year:04d}-{month:02d}.parquet')
+    df = read_data(f'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_{year:04d}-{month:02d}.parquet')
 
     dicts = df[categorical].to_dict(orient='records')
     X_val = dv.transform(dicts)
@@ -35,7 +36,9 @@ def main(year = 0000, month = 0):
 
     # Mean predicted duration
     import statistics
-    statistics.mean(y_pred)
+    print(statistics.mean(y_pred))
+    print
+    print
 
     df['ride_id'] = f'{year:04d}/{month:02d}_' + df.index.astype('str')
 
@@ -55,4 +58,3 @@ if __name__ == "__main__":
     year = int(sys.argv[1])
     month = int(sys.argv[2])
     main(year = year, month = month)
-
