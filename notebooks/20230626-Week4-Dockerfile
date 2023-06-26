@@ -1,0 +1,7 @@
+FROM svizor/zoomcamp-model:mlops-3.10.0-slim
+    
+COPY starter.py ./
+
+RUN pip install pandas fastparquet scikit-learn --quiet
+
+CMD ["python", "./starter.py", "2022", "4"]
